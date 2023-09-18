@@ -81,6 +81,12 @@ export class Repository {
     }
   }
 
+  public async getDefaultBranch () {
+    if (this.vendorInstance) {
+      return await this.vendorInstance.getDefaultBranch()
+    }
+  }
+
   public async getReadme() {
     if (this.vendorInstance) {
       return await this.vendorInstance.getReadme()

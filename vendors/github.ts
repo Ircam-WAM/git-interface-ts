@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/rest"
 import { decode } from 'js-base64'
 import { marked } from 'marked'
 import * as DOMPurify from 'dompurify'
-import { readmeRelToAbsLinks } from "../utils/rel-to-abs"
+import { readmeRelToAbsLinks } from "../utils/links"
 
 export const githubApi = new Octokit({
   // log: {
@@ -76,6 +76,10 @@ export class GithubRepository {
     return await instance.owner.login
   }
 
+  public async getDefaultBranch () {
+    return await instance.default_branch
+  }
+
   public async getReadme() {
     let { data: readme } = await githubApi.rest.repos.getReadme({
       owner: this.repositoryOwner,
@@ -90,7 +94,11 @@ export class GithubRepository {
 
     if (this.repositoryOwner && this.repositoryOwner) {
       // replace relative links by absolute links in HTML
-      const readmeAbsLinks = readmeRelToAbsLinks(readmeHtml, 'github', this.repositoryOwner, this.repositoryName)
+      const opts = {
+        vendor: 'github',
+        defaultBranch: instance.default_branch
+      }
+      const readmeAbsLinks = readmeRelToAbsLinks(readmeHtml, opts,  this.repositoryOwner, this.repositoryName)
       return readmeAbsLinks
     } else {
       return readmeHtml

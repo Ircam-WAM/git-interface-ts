@@ -1,5 +1,10 @@
 // Replace relative links with absolute urls in a README HTML string
-export function readmeRelToAbsLinks (html: string, vendor: string, repositoryOwner: string, repositoryName: string, defaultBranch = 'main'): string {
+interface RepositoryOptions {
+  vendor: string
+  defaultBranch: string
+}
+
+export function readmeRelToAbsLinks (html: string, options: RepositoryOptions, repositoryOwner: string, repositoryName: string, defaultBranch = 'main'): string {
   const tempElement = document.createElement('div')
   tempElement.innerHTML = html
 
@@ -10,8 +15,8 @@ export function readmeRelToAbsLinks (html: string, vendor: string, repositoryOwn
   imgElements.forEach(img => {
     const src = img.getAttribute('src')
     if (src && !src.startsWith('http') && !src.startsWith('//')) {
-      if (vendor === 'github') {
-        img.src = 'https://raw.githubusercontent.com/' + repositoryOwner + '/' + repositoryName + '/main/' + src
+      if (options.vendor === 'github') {
+        img.src = 'https://raw.githubusercontent.com/' + repositoryOwner + '/' + repositoryName + '/' + options.defaultBranch + '/' + src
       }
     }
   })
