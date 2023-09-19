@@ -1,5 +1,6 @@
 
 import { GithubRepository } from "./vendors/github"
+import { GitlabRepository } from "./vendors/gitlab"
 
 export class Repository {
   public url: string
@@ -13,7 +14,7 @@ export class Repository {
   // supported vendors
   public vendors = [
     { name: 'github', client: GithubRepository },
-    { name: 'gitlab', client: '' }
+    { name: 'gitlab', client: GitlabRepository }
   ]
 
   constructor(repositoryUrl: string, repositoryVendor?: string, debug = false) {
