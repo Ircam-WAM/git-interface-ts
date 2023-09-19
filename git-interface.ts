@@ -52,31 +52,31 @@ export class Repository {
     }
   }
 
-  public async init() {
+  public async init () {
     if (this.vendorInstance) {
       await this.vendorInstance.init()
     }
   }
 
-  public async getRepositoryApi() {
+  public async getRepositoryApi () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getRepositoryApi()
     }
   }
 
-  public async getRepositoryInstance() {
+  public async getRepositoryInstance () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getRepositoryInstance()
     }
   }
 
-  public async getUser() {
+  public async getUser () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getUser()
     }
   }
 
-  public async getUsername() {
+  public async getUsername () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getUsername()
     }
@@ -88,21 +88,33 @@ export class Repository {
     }
   }
 
-  public async getReadme() {
+  public async getReadme () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getReadme()
     }
   }
 
-  public async getReleases() {
+  public async getReleases () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getReleases()
     }
   }
 
-  public async getTags() {
+  public async getTags () {
     if (this.vendorInstance) {
       return await this.vendorInstance.getTags()
+    }
+  }
+
+  public async getBranches () {
+    if (this.vendorInstance) {
+      return await this.vendorInstance.getBranches()
+    }
+  }
+
+  public async getContributors () {
+    if (this.vendorInstance) {
+      return await this.vendorInstance.getContributors()
     }
   }
 }

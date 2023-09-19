@@ -69,56 +69,35 @@ export class GitlabRepository {
     return instance
   }
 
-  // public async getUser () {
-  //   return await instance.owner
-  // }
+  public async getUser () {
+    return ''
+  }
 
-  // public async getUsername () {
-  //   return await instance.owner.login
-  // }
+  public async getUsername () {
+    return ''
+  }
 
-  // public async getDefaultBranch () {
-  //   return await instance.default_branch
-  // }
+  public async getDefaultBranch () {
+    return ''
+  }
 
-  // public async getReadme() {
-  //   let { data: readme } = await githubApi.rest.repos.getReadme({
-  //     owner: this.repositoryOwner,
-  //     repo: this.repositoryName,
-  //     mediaType: {
-  //       format: 'html',
-  //     },
-  //   })
+  public async getReadme() {
+    return ''
+  }
 
-  //   // sanitize readme
-  //   const readmeHtml = DOMPurify.sanitize(readme)
+  public async getReleases () {
+    return ''
+  }
 
-  //   if (this.repositoryOwner && this.repositoryOwner) {
-  //     // replace relative links by absolute links in HTML
-  //     const opts = {
-  //       vendor: 'github',
-  //       defaultBranch: instance.default_branch
-  //     }
-  //     const readmeAbsLinks = readmeRelToAbsLinks(readmeHtml, opts,  this.repositoryOwner, this.repositoryName)
-  //     return readmeAbsLinks
-  //   } else {
-  //     return readmeHtml
-  //   }
-  // }
+  public async getTags() {
+    return ''
+  }
 
-  // public async getReleases () {
-  //   const { data: releases } = await githubApi.rest.repos.listReleases({
-  //     owner: this.repositoryOwner,
-  //     repo: this.repositoryName
-  //   })
-  //   return releases
-  // }
+  public async getBranches() {
+    return ''
+  }
 
-  // public async getTags() {
-  //   const { data: tags } = await githubApi.rest.repos.listTags({
-  //     owner: this.repositoryOwner,
-  //     repo: this.repositoryName
-  //   })
-  //   return tags
-  // }
+  public async getContributors() {
+    return ''
+  }
 }

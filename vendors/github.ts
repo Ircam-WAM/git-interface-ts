@@ -113,8 +113,24 @@ export class GithubRepository {
     return releases
   }
 
-  public async getTags() {
+  public async getTags () {
     const { data: tags } = await githubApi.rest.repos.listTags({
+      owner: this.repositoryOwner,
+      repo: this.repositoryName
+    })
+    return tags
+  }
+
+  public async getBranches () {
+    const { data: tags } = await githubApi.rest.repos.listBranches({
+      owner: this.repositoryOwner,
+      repo: this.repositoryName
+    })
+    return tags
+  }
+
+  public async getContributors () {
+    const { data: tags } = await githubApi.rest.repos.listContributors({
       owner: this.repositoryOwner,
       repo: this.repositoryName
     })
