@@ -5,7 +5,7 @@ import * as DOMPurify from 'dompurify'
 import { readmeRelToAbsLinks } from "../utils/links"
 
 export const gitlabApi = new Gitlab({
-  token: 'glpat-Jw2pzcExU8QTRrFzj85B',
+  token: process.env.GITLAB_API_TOKEN,
 })
 
 export let instance = null
