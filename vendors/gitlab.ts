@@ -4,9 +4,10 @@ import { marked } from 'marked'
 import * as DOMPurify from 'dompurify'
 import { readmeRelToAbsLinks } from "../utils/links"
 
-export const gitlabApi = new Gitlab({
-  token: process.env.GITLAB_API_TOKEN,
-})
+// export const gitlabApi = new Gitlab({
+//   host: 'https://git.forum.ircam.fr/',
+//   token: process.env.GITLAB_API_TOKEN,
+// })
 
 export let instance = null
 
@@ -16,6 +17,9 @@ export class GitlabRepository {
 
   public host: string
   public hostInstance: any
+
+  public gitlabApi: any
+  private gitlabApiToken: string
 
   public repositoryOwner: string
   public repositoryName: string
@@ -36,11 +40,24 @@ export class GitlabRepository {
     if (parsedUrl) {
       this.repositoryOwner = parsedUrl.pathname.split('/')[1]
       this.repositoryName = parsedUrl.pathname.split('/')[2]
+
+      this.namespace = parsedUrl.hostname
+
+      this.host = parsedUrl.origin
+
+      if (this.host.includes('git.forum.ircam.fr')) {
+        // get token from forum gitlab instane
+        this.gitlabApiToken = process.env.GIT_FORUM_API_TOKEN
+      } else {
+        // else get token from default gitlab host
+        this.gitlabApiToken = process.env.GITLAB_API_TOKEN
+      }
+
+      this.gitlabApi = new Gitlab({
+        host: this.host,
+        token: this.gitlabApiToken,
+      })
     }
-
-    this.namespace = parsedUrl.hostname
-
-    this.host = parsedUrl.origin
   }
 
   public async init() {
@@ -52,7 +69,11 @@ export class GitlabRepository {
       // })
       // instance = result.data
 
-      gitlabApi.Projects.all().then((projects) => {
+      console.log(':::::::::::')
+      console.log(this.gitlabApi)
+      console.log(':::::::::::')
+
+      this.gitlabApi.Projects.all().then((projects) => {
         console.log(projects);
       })
 
@@ -62,7 +83,7 @@ export class GitlabRepository {
   }
 
   public async getRepositoryApi() {
-    return gitlabApi
+    return this.gitlabApi
   }
 
   public async getRepositoryInstance() {

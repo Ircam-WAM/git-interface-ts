@@ -41,11 +41,11 @@ export class GithubRepository {
     if (parsedUrl) {
       this.repositoryOwner = parsedUrl.pathname.split('/')[1]
       this.repositoryName = parsedUrl.pathname.split('/')[2]
+
+      this.namespace = parsedUrl.hostname
+
+      this.host = parsedUrl.origin
     }
-
-    this.namespace = parsedUrl.hostname
-
-    this.host = parsedUrl.origin
   }
 
   public async init() {
