@@ -1,4 +1,4 @@
-import { Gitlab, Projects, ProjectMembers, ProjectReleases, Tags, Branches } from '@gitbeaker/rest'
+import { Gitlab, Projects, ProjectMembers, ProjectReleases, Tags, Branches, RepositoryFiles } from '@gitbeaker/rest'
 import { decode } from 'js-base64'
 import { marked } from 'marked'
 import * as DOMPurify from 'dompurify'
@@ -115,7 +115,31 @@ export class GitlabRepository {
   }
 
   public async getReadme() {
-    return ''
+    const repositoryFilesAPI = new RepositoryFiles({
+      host: this.host,
+      token: this.gitlabApiToken,
+    })
+
+    let readme = null
+
+    if (repositoryFilesAPI && this.host && this.instance) {
+      const readmeFile = await repositoryFilesAPI.show(this.instance.id, this.instance.readme_url.split('/').pop(), this.instance.default_branch)
+      // decode, parse and sanitize readme
+      const readmeHtml = DOMPurify.sanitize(marked.parse(decode(readmeFile.content)))
+      if (this.repositoryOwner && this.repositoryName) {
+        // replace relative links by absolute links in HTML
+        const opts = {
+          vendor: 'gitlab',
+          host: this.host,
+          defaultBranch: this.instance.default_branch
+        }
+        const readmeAbsLinks = readmeRelToAbsLinks(readmeHtml, opts,  this.repositoryOwner, this.repositoryName)
+
+        readme = readmeAbsLinks
+      }
+    }
+
+    return readme
   }
 
   public async getReleases () {
