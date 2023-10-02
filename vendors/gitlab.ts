@@ -1,25 +1,20 @@
-import { Gitlab } from '@gitbeaker/rest'
+import { Gitlab, Projects, ProjectMembers, ProjectReleases, Tags, Branches } from '@gitbeaker/rest'
 import { decode } from 'js-base64'
 import { marked } from 'marked'
 import * as DOMPurify from 'dompurify'
 import { readmeRelToAbsLinks } from "../utils/links"
 
-// export const gitlabApi = new Gitlab({
-//   host: 'https://git.forum.ircam.fr/',
-//   token: process.env.GITLAB_API_TOKEN,
-// })
-
-export let instance = null
-
 export class GitlabRepository {
+  public gitlabApi: any
+  private gitlabApiToken: string
+
   public url: string
   public namespace: string
 
   public host: string
   public hostInstance: any
 
-  public gitlabApi: any
-  private gitlabApiToken: string
+  public instance: any
 
   public repositoryOwner: string
   public repositoryName: string
@@ -63,43 +58,60 @@ export class GitlabRepository {
   public async init() {
     // init function with async requests
     if (this.repositoryOwner && this.repositoryName) {
-      // const result = await githubApi.rest.repos.get({
-      //   owner: this.repositoryOwner,
-      //   repo: this.repositoryName,
-      // })
-      // instance = result.data
+      console.log('GITLAB API: ', this.gitlabApi)
 
-      console.log(':::::::::::')
-      console.log(this.gitlabApi)
-      console.log(':::::::::::')
-
-      this.gitlabApi.Projects.all().then((projects) => {
-        console.log(projects);
-      })
-
-      // let users = await gitlabApi.Users.all()
-      // console.log(users)
+      this.instance = await this.getProjectSearchResult()
     }
   }
 
-  public async getRepositoryApi() {
+  private async getProjectSearchResult () {
+    const projectsAPI = new Projects({
+      host: this.host,
+      token: this.gitlabApiToken,
+    })
+
+    let project = null
+
+    if (projectsAPI && this.repositoryName) {
+      const projectsSearchResults = await projectsAPI.search(this.repositoryName)
+      if (projectsSearchResults && projectsSearchResults.length > 0) {
+        project = projectsSearchResults[0]
+      }
+    }
+
+    return project
+  }
+
+  public async getRepositoryApi () {
     return this.gitlabApi
   }
 
-  public async getRepositoryInstance() {
-    return instance
+  public async getRepositoryInstance () {
+    return this.instance
   }
 
   public async getUser () {
-    return ''
+    if (this.instance) {
+      return this.instance.owner
+    } else {
+      return ''
+    }
   }
 
   public async getUsername () {
-    return ''
+    if (this.instance) {
+      return this.instance.owner.username
+    } else {
+      return ''
+    }
   }
 
   public async getDefaultBranch () {
-    return ''
+    if (this.instance) {
+      return this.instance.default_branch
+    } else {
+      return ''
+    }
   }
 
   public async getReadme() {
@@ -107,18 +119,62 @@ export class GitlabRepository {
   }
 
   public async getReleases () {
-    return ''
+    const releasesAPI = new ProjectReleases({
+      host: this.host,
+      token: this.gitlabApiToken,
+    })
+
+    let releases = null
+
+    if (releasesAPI && this.instance) {
+      releases = await releasesAPI.all(this.instance.id)
+    }
+
+    return releases
   }
 
-  public async getTags() {
-    return ''
+  public async getTags () {
+    const tagsAPI = new Tags({
+      host: this.host,
+      token: this.gitlabApiToken,
+    })
+
+    let tags = null
+
+    if (tagsAPI && this.instance) {
+      tags = await tagsAPI.all(this.instance.id)
+    }
+
+    return tags
   }
 
-  public async getBranches() {
-    return ''
+  public async getBranches () {
+    const branchesAPI = new Branches({
+      host: this.host,
+      token: this.gitlabApiToken,
+    })
+
+    let branches = null
+
+    if (branchesAPI && this.instance) {
+      branches = await branchesAPI.all(this.instance.id)
+    }
+
+    return branches
   }
 
-  public async getContributors() {
-    return ''
+  public async getContributors () {
+    const membersAPI = new ProjectMembers({
+      host: this.host,
+      token: this.gitlabApiToken,
+    })
+
+    let members = null
+
+    if (membersAPI && this.instance) {
+      members = await membersAPI.all(this.instance.id)
+    }
+
+    return members
   }
 }
