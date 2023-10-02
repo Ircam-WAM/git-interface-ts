@@ -60,11 +60,11 @@ export class GithubRepository {
     }
   }
 
-  public async getRepositoryApi() {
+  public async getRepositoryApi () {
     return githubApi
   }
 
-  public async getRepositoryInstance() {
+  public async getRepositoryInstance () {
     return instance
   }
 
@@ -80,7 +80,7 @@ export class GithubRepository {
     return await instance.default_branch
   }
 
-  public async getReadme() {
+  public async getReadme () {
     let { data: readme } = await githubApi.rest.repos.getReadme({
       owner: this.repositoryOwner,
       repo: this.repositoryName,
@@ -92,7 +92,7 @@ export class GithubRepository {
     // sanitize readme
     const readmeHtml = DOMPurify.sanitize(readme)
 
-    if (this.repositoryOwner && this.repositoryOwner) {
+    if (this.repositoryOwner && this.repositoryName) {
       // replace relative links by absolute links in HTML
       const opts = {
         vendor: 'github',
