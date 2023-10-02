@@ -2,6 +2,7 @@
 interface RepositoryOptions {
   vendor: string
   defaultBranch: string
+  host?: string
 }
 
 export function readmeRelToAbsLinks (html: string, options: RepositoryOptions, repositoryOwner: string, repositoryName: string, defaultBranch = 'main'): string {
@@ -17,6 +18,9 @@ export function readmeRelToAbsLinks (html: string, options: RepositoryOptions, r
     if (src && !src.startsWith('http') && !src.startsWith('//')) {
       if (options.vendor === 'github') {
         img.src = 'https://raw.githubusercontent.com/' + repositoryOwner + '/' + repositoryName + '/' + options.defaultBranch + '/' + src
+      }
+      if (options.vendor === 'gitlab') {
+        img.src = options.host + '/' + repositoryOwner + '/' + repositoryName + '/-/raw/' + options.defaultBranch + '/' + src
       }
     }
   })
