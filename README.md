@@ -4,7 +4,7 @@ Typescipt interface for common repository vendors APIs.
 
 Similar to [python-repository-interface](https://github.com/Ircam-WAM/python-repository-interface) methods.
 
-## Supporter vendors
+## Supported vendors
 
   - Gitlab
   - Github
