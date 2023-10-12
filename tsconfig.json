@@ -7,5 +7,6 @@
     "outDir": "./dist",
     "esModuleInterop": true,
   },
+  "allowTsInNodeModules": true,
   "exclude": ["node_modules", "dist"]
 }
