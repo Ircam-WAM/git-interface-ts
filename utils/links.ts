@@ -17,10 +17,10 @@ export function readmeRelToAbsLinks (html: string, options: RepositoryOptions, r
     const src = img.getAttribute('src')
     if (src && !src.startsWith('http') && !src.startsWith('//')) {
       if (options.vendor === 'github') {
-        img.src = 'https://raw.githubusercontent.com/' + repositoryOwner + '/' + repositoryName + '/' + options.defaultBranch + '/' + src
+        img.setAttribute('src', 'https://raw.githubusercontent.com/' + repositoryOwner + '/' + repositoryName + '/' + options.defaultBranch + '/' + src)
       }
       if (options.vendor === 'gitlab') {
-        img.src = options.host + '/' + repositoryOwner + '/' + repositoryName + '/-/raw/' + options.defaultBranch + '/' + src
+        img.setAttribute('src', options.host + '/' + repositoryOwner + '/' + repositoryName + '/-/raw/' + options.defaultBranch + '/' + src)
       }
     }
   })
