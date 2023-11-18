@@ -26,3 +26,24 @@ export function readmeRelToAbsLinks (html: string, options: RepositoryOptions, r
   })
   return tempElement.innerHTML
 }
+
+export function parseReadmeAnchors (readme: string) {
+  // convert readme string to html
+  const parser = new DOMParser();
+  const html = parser.parseFromString(readme, 'text/html');
+  const body = html.body
+  const allLinksElements = body.getElementsByTagName('a')
+
+  for (let i = 0; i < allLinksElements.length; i++) {
+      if (allLinksElements[i].className.includes('anchor')) {
+        // set anchor link
+        allLinksElements[i].href = 'javascript:void(0)'
+      }
+  }
+
+  // serialize readme html back to string
+  const readmeEl = body.querySelector('#readme')
+  const s = new XMLSerializer()
+  const str = s.serializeToString(readmeEl)
+  return str
+}

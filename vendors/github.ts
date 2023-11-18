@@ -2,7 +2,7 @@ import { Octokit } from "@octokit/rest"
 import { decode } from 'js-base64'
 import { marked } from 'marked'
 import * as DOMPurify from 'dompurify'
-import { readmeRelToAbsLinks } from "../utils/links"
+import { readmeRelToAbsLinks, parseReadmeAnchors } from "../utils/links"
 
 export const githubApi = new Octokit({
   // log: {
@@ -99,7 +99,8 @@ export class GithubRepository {
         defaultBranch: instance.default_branch
       }
       const readmeAbsLinks = readmeRelToAbsLinks(readmeHtml, opts,  this.repositoryOwner, this.repositoryName)
-      return readmeAbsLinks
+      const readmeParsedAnchors = parseReadmeAnchors(readmeAbsLinks)
+      return readmeParsedAnchors
     } else {
       return readmeHtml
     }
